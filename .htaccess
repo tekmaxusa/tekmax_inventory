@@ -1,0 +1,12 @@
+# Inventory System — Apache hardening
+Options -Indexes
+
+# Block private paths
+RedirectMatch 404 (?i)/(storage|tools)(/|$)
+RedirectMatch 404 (?i)/(_smoke_test|_e2e_test)\.php$
+
+<IfModule mod_headers.c>
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set X-Content-Type-Options "nosniff"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>

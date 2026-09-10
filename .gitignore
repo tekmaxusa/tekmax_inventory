@@ -1,0 +1,11 @@
+# Inventory System — ignore local secrets / runtime files
+.env
+.env.*
+!.env.example
+config/mail.php
+storage/logs/*
+!storage/logs/.gitkeep
+uploads/products/*
+!uploads/products/.htaccess
+!uploads/products/seed_*.svg
+*.log

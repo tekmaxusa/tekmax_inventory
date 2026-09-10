@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#4F67FF"/>
+  <circle cx="200" cy="150" r="70" fill="rgba(255,255,255,0.18)"/>
+  <text x="200" y="175" text-anchor="middle" font-family="Arial,sans-serif" font-size="72" font-weight="700" fill="#ffffff">S</text>
+  <text x="200" y="270" text-anchor="middle" font-family="Arial,sans-serif" font-size="22" font-weight="600" fill="#ffffff">C9-1B</text>
+  <text x="200" y="310" text-anchor="middle" font-family="Arial,sans-serif" font-size="14" fill="rgba(255,255,255,0.85)">Sensationnel Cloud 9 Wig</text>
+</svg>

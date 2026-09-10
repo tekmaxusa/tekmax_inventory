@@ -1,0 +1,2 @@
+# Deny all web access to storage (mail logs, OTP dumps, etc.)
+Require all denied

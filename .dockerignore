@@ -1,0 +1,17 @@
+# Build context exclusions for smaller / safer images
+.git
+.gitignore
+.env
+.env.*
+!.env.example
+storage/logs/*
+!storage/logs/.gitkeep
+uploads/products/*
+!uploads/products/.htaccess
+!uploads/products/seed_*.svg
+_smoke_test.php
+_e2e_test.php
+SYSTEM-GUIDE.md
+agent-transcripts
+**/*.md
+!README.md

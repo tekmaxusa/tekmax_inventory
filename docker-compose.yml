@@ -1,0 +1,63 @@
+services:
+  db:
+    image: mariadb:10.11
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_NAME:-inventory_system}
+      MYSQL_USER: ${DB_USER:-inventory}
+      MYSQL_PASSWORD: ${DB_PASS:?Set DB_PASS in .env}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?Set DB_ROOT_PASSWORD in .env}
+    volumes:
+      - inventory_db_data:/var/lib/mysql
+      - ./database/inventory_schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    networks:
+      - inventory_net
+
+  app:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "${APP_PORT:-8080}:80"
+    environment:
+      APP_ENV: ${APP_ENV:-production}
+      APP_BASE: ${APP_BASE:-}
+      APP_URL: ${APP_URL:-http://localhost:8080}
+      APP_SESSION_IDLE_SECONDS: ${APP_SESSION_IDLE_SECONDS:-7200}
+      DB_HOST: db
+      DB_PORT: "3306"
+      DB_NAME: ${DB_NAME:-inventory_system}
+      DB_USER: ${DB_USER:-inventory}
+      DB_PASS: ${DB_PASS}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+      MAIL_DRIVER: ${MAIL_DRIVER:-log}
+      MAIL_FROM: ${MAIL_FROM:-noreply@localhost}
+      MAIL_FROM_NAME: ${MAIL_FROM_NAME:-Inventory Management System}
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+      SMTP_SECURE: ${SMTP_SECURE:-tls}
+    volumes:
+      - inventory_uploads:/var/www/html/uploads/products
+      - inventory_logs:/var/www/html/storage/logs
+    networks:
+      - inventory_net
+
+volumes:
+  inventory_db_data:
+  inventory_uploads:
+  inventory_logs:
+
+networks:
+  inventory_net:
+    driver: bridge
