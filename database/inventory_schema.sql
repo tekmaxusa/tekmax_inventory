@@ -223,6 +223,16 @@ CREATE TABLE password_reset_otps (
   INDEX idx_reset_user_active (user_id, used_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- -----------------------------------------------------------------------------
+-- rate_limit_hits (shared across app instances)
+-- -----------------------------------------------------------------------------
+CREATE TABLE rate_limit_hits (
+  hit_id      BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  bucket_hash CHAR(64) NOT NULL,
+  hit_at      INT UNSIGNED NOT NULL,
+  INDEX idx_rate_bucket_time (bucket_hash, hit_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Platform super admin: super@example.com / superadmin123
 INSERT INTO users (name, email, password_hash, role, is_active) VALUES
 ('Platform Super Admin', 'super@example.com', '$2y$10$NxaDtv.TtgPHycGOCAHn9.JiwEBkvcjKrMHAmShEf3.MFjDjvsZuq', 'super_admin', 1);

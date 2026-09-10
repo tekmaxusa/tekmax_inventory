@@ -198,6 +198,17 @@ function ensure_schema(PDO $pdo): void
         );
     }
 
+    if (!schema_table_exists($pdo, 'rate_limit_hits')) {
+        $pdo->exec(
+            "CREATE TABLE rate_limit_hits (
+              hit_id      BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+              bucket_hash CHAR(64) NOT NULL,
+              hit_at      INT UNSIGNED NOT NULL,
+              INDEX idx_rate_bucket_time (bucket_hash, hit_at)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci"
+        );
+    }
+
     if (!app_is_production()) {
         $super = $pdo->prepare('SELECT user_id FROM users WHERE email = ? LIMIT 1');
         $super->execute(['super@example.com']);
